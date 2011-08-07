@@ -1,0 +1,8 @@
+
+/genesis/Debug
+*.opensdf
+*.sdf
+*.sln
+*.suo
+/Debug
+/ipch
