@@ -15,7 +15,7 @@ public:
 	void addRef();
 	void release();
 	static void collectGarbage();
-	static void collectRemainingObjects(bool logWarnings=false);
+	static void collectRemainingObjects(bool logWarnings);
 	virtual unsigned long size()=0;
 };
 

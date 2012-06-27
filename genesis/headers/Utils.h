@@ -1,4 +1,2 @@
-#ifndef UTILS_H
-#define UTILS_H
+#pragma once
 bool safeInit(const char* name, bool (*func) (void));
-#endif

@@ -1,64 +1,58 @@
 #pragma once
-template<typename T>
+#include "MMObject.h"
+template<class T>
 
-class MMPointer
+class MMWrapper : public MMObject
 {
 protected:
 	T* obj;
 public:
 	// basic constructor
-	MMPointer(void)
+	MMWrapper(void)
 	{
 		obj = 0;
 	}
 
 	// constructor from pointer
-	MMPointer(T* o)
+	MMWrapper(T* o)
 	{
 		obj = 0;
 		*this = o;
 	}
 
 	// copy constructor
-	MMPointer(const MMPointer<T>& p)
+	MMWrapper(const MMWrapper<T>& p)
 	{
 		obj = 0;
 		*this = p;
 	}
 
 	// destructor
-	~MMPointer(void)
-	{
-		if (obj) obj->release();
-	}
+	~MMWrapper(void) {}
 
-	// assignment operator - normal pointer
+	// assignment operator - pointer
 	inline void operator =(T* o)
 	{
-		if (obj) obj->release();
 		obj = o;
-		if (obj) obj->addRef();
 	}
 
-	// assignment operator - memory managed pointer
-	inline void operator =(const MMPointer<T>& p)
+	// assignment operator - wrapper
+	inline void operator =(const MMWrapper<T>& p)
 	{
-		if (obj) obj->release();
 		obj = p.obj;
-		if (obj) obj->addRef();
 	}
 
 	// access as reference
 	inline T& operator *() const
 	{
-		assert(obj != 0 && "Tried to * on a NULL smart pointer");
+		assert(obj != 0 && "Tried to * on a NULL  wrapper");
 		return *obj;
 	}
 
 	// access as pointer
 	inline T* operator ->() const
 	{
-		assert(obj != 0 && "Tried to -> on a NULL smart pointer");
+		assert(obj != 0 && "Tried to -> on a NULL wrapper");
 		return obj;
 	}
 
@@ -81,7 +75,7 @@ public:
 	}
 
 	// equivalence
-	inline bool operator ==(const MMPointer<T> &p) const
+	inline bool operator ==(const MMWrapper<T> &p) const
 	{
 		return (obj == p.obj);
 	}
@@ -90,4 +84,6 @@ public:
 	{
 		return (obj == o);
 	}
+
+	AUTO_SIZE
 };

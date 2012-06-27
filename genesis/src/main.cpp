@@ -2,6 +2,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include "constants.h"
+#include "MMWrapper.h"
+#include "MMPointer.h"
 #include "Utils.h"
  
 int main(int argc, char **argv)
@@ -23,14 +25,18 @@ int main(int argc, char **argv)
 
    //al_clear_to_color(al_map_rgb(0,20,40));
 
-   ALLEGRO_BITMAP* background = al_load_bitmap("assets/images/backgrounds/wallpaper6.jpg");
-   al_draw_scaled_bitmap(background, 166, 0, 1333, 1000, 0, 0, 640, 480, 0);
+   {
+	   MMPointer<MMWrapper<ALLEGRO_BITMAP>> background = new MMWrapper<ALLEGRO_BITMAP>(al_load_bitmap("assets/images/backgrounds/wallpaper6.jpg"));
+	   al_draw_scaled_bitmap(*background, 166, 0, 1333, 1000, 0, 0, RESOLUTION[0], RESOLUTION[1], 0);
  
-   al_flip_display();
+	   al_flip_display();
+   }
 
+   MMObject::collectRemainingObjects(true);
+ 
    al_rest(3.0);
  
    al_destroy_display(display);
- 
+
    return 0;
 }

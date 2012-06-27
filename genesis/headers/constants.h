@@ -1,11 +1,9 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
-
+#pragma once
 #include <stdio.h>
 
-#define DEBUG 1;
+#define DEBUG 1
 
-#if DEBUG == 1;
+#if DEBUG == 1
 #define print(x) fprintf(stdout, x)
 #define printErr(x) fprintf(stderr, x)
 #else
@@ -14,4 +12,3 @@
 #endif
 
 const int RESOLUTION [2] = {640, 480};
-#endif

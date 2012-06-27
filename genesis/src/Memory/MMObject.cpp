@@ -1,4 +1,5 @@
 #include "MMObject.h"
+#include "constants.h"
 using namespace std;
 
 set<MMObject*> MMObject::liveObjects;
@@ -6,6 +7,7 @@ set<MMObject*> MMObject::deadObjects;
 
 MMObject::MMObject(void)
 {
+	refcount = 0;
 	liveObjects.insert(this);
 }
 
@@ -44,6 +46,7 @@ void MMObject::collectRemainingObjects(bool logWarnings=false)
 
 		if (logWarnings) {
 			// log an error message
+			printErr("%i", &o);
 		}
 		
 		delete o;
