@@ -1,4 +1,6 @@
+#pragma once
 template<class T, int i>
+
 class MMBuffer : public MMObject
 {
 protected:
@@ -19,6 +21,7 @@ public:
 };
 
 template<class T>
+
 class MMDynamicBuffer : public MMObject
 {
 protected:

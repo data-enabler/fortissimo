@@ -1,3 +1,4 @@
+#include "Utils.h"
 #include <stdio.h>
 
 bool safeInit(const char* name, bool (*func) (void)) {

@@ -1,12 +1,11 @@
 #pragma once
 #include <set>
-using namespace std;
 
 class MMObject
 {
 private:
-	static set<MMObject*> liveObjects;
-	static set<MMObject*> deadObjects;
+	static std::set<MMObject*> liveObjects;
+	static std::set<MMObject*> deadObjects;
 	long refcount;
 protected:
 	MMObject(void);

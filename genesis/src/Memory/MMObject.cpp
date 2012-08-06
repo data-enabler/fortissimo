@@ -1,5 +1,6 @@
 #include "MMObject.h"
-#include "constants.h"
+#include "Log.h"
+
 using namespace std;
 
 set<MMObject*> MMObject::liveObjects;
@@ -42,11 +43,10 @@ void MMObject::collectRemainingObjects(bool logWarnings=false)
 {
 	collectGarbage();
 	for (set<MMObject*>::iterator it = liveObjects.begin(); it != liveObjects.end(); it++) {
-		MMObject *o = (*it);
+		MMObject* o = *it;
 
 		if (logWarnings) {
-			// log an error message
-			printErr("%i", &o);
+			Log::get().write(LOG_APP, "Error: Unreleased Memory of type %s and size %i", typeid(*o).name(), sizeof(*o));
 		}
 		
 		delete o;
