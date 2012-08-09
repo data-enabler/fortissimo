@@ -4,12 +4,6 @@
 
 #define MAX_LOG_STRINGS 256
 
-const int LOG_APP = 1;
-const int LOG_CLIENT = 2;
-const int LOG_SERVER = 4;
-// display error to user
-const int LOG_USER = 8;
-
 class Log
 {
 protected:
@@ -25,6 +19,12 @@ protected:
 	bool loadStrings();
 
 public:
+	static const int LOG_APP = 1;
+	static const int LOG_CLIENT = 2;
+	static const int LOG_SERVER = 4;
+	// Display error to user
+	static const int LOG_USER = 8;
+	
 	static Log& get();
 
 	bool init();

@@ -3,15 +3,11 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include "constants.h"
+#include <iostream>
 
 using namespace std;
 
 Log::Log() {}
-
-bool Log::loadStrings()
-{
-	return true;
-}
 
 Log& Log::get()
 {
@@ -35,9 +31,9 @@ bool Log::init()
 void Log::write(int target, const char* msg, ...)
 {
 	va_list args;
-	va_start(args,msg);
+	va_start(args, msg);
 	char msgBuf[1024];
-	vsprintf(msgBuf, msg, args);
+	if (vsnprintf(msgBuf, 1024, msg, args) < 0) msgBuf[1023] = '\0';
 
 	if (target & LOG_APP) {
 		appLog<<msgBuf<<"\n";
@@ -68,20 +64,21 @@ void Log::write(int target, const char* msg, ...)
 void Log::write(int target, unsigned long msgID, ...)
 {
 	va_list args;
-	va_start(args,msgID);
+	va_start(args, msgID);
 	char msgBuf[1024];
 
-	vsprintf(msgBuf, logStrings[msgID].c_str(), args);
+	if (vsnprintf(msgBuf, 1024, logStrings[msgID - 1].c_str(), args) < 0) msgBuf[1023] = '\0';
+
 	write(target, msgBuf);
 }
 
 void Log::write(char* const target, const char* msg, ...)
 {
 	va_list args;
-	va_start(args,msg);
+	va_start(args, msg);
 	char msgBuf[1024];
 	ofstream* customLog;
-	vsprintf(msgBuf, msg, args);
+	if (vsnprintf(msgBuf, 1024, msg, args) < 0) msgBuf[1023] = '\0';
 	
 	if (runtimeLogs.count(target)) {
 		customLog = runtimeLogs.find(target)->second;
@@ -99,4 +96,18 @@ void Log::write(char* const target, const char* msg, ...)
 #ifdef DEBUG
 	(*customLog).flush();
 #endif
+}
+
+bool Log::loadStrings()
+{
+	ifstream in("Log/logStrings.txt");
+	if (in.fail()) return false;
+	
+	for (int i = 0; (!in.eof() && i < MAX_LOG_STRINGS); i++) {
+		char msgBuf[1024];
+		in.getline(msgBuf, 1024);
+		logStrings[i] = msgBuf;
+	}
+	
+	return true;
 }

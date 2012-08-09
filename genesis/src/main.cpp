@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 		al_draw_scaled_bitmap(*background, 166, 0, 1333, 1000, 0, 0, RESOLUTION[0], RESOLUTION[1], 0);
 		al_flip_display();
 	}
-	
+
 	MMObject::collectGarbage();
  
 	MMObject::collectRemainingObjects(true);

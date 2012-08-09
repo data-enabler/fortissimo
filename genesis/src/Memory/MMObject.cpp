@@ -46,7 +46,7 @@ void MMObject::collectRemainingObjects(bool logWarnings=false)
 		MMObject* o = *it;
 
 		if (logWarnings) {
-			Log::get().write(LOG_APP, "Error: Unreleased Memory of type %s and size %i", typeid(*o).name(), sizeof(*o));
+			Log::get().write(Log::LOG_APP, "Error: Unreleased Memory of type %s and size %i", typeid(*o).name(), sizeof(*o));
 		}
 		
 		delete o;
