@@ -120,6 +120,7 @@ void ProfileSample::resetSample(std::string sampleName)
 {
 	for (int i = 0; i < MAX_PROFILER_SAMPLES; i++) {
 		if (samples[i].name == sampleName) {
+			samples[i].isValid = false;
 			samples[i].dataCount = 0;
 			samples[i].averagePercent = 0.0f;
 			samples[i].minPercent = FLT_MAX;
@@ -131,6 +132,7 @@ void ProfileSample::resetSample(std::string sampleName)
 void ProfileSample::resetAll()
 {
 	for (int i = 0; i < MAX_PROFILER_SAMPLES; i++) {
+		samples[i].isValid = false;
 		samples[i].dataCount = 0;
 		samples[i].averagePercent = 0.0f;
 		samples[i].minPercent = FLT_MAX;
