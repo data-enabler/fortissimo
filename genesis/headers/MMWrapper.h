@@ -45,7 +45,7 @@ public:
 	// access as reference
 	inline T& operator *() const
 	{
-		assert(obj != 0 && "Tried to * on a NULL  wrapper");
+		assert(obj != 0 && "Tried to * on a NULL wrapper");
 		return *obj;
 	}
 

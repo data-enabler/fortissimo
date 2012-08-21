@@ -4,8 +4,6 @@
 #include "float.h"
 #include "ProfilerLogHandler.h"
 
-#define _CRT_SECURE_NO_WARNINGS
-
 int ProfileSample::lastOpenedSample = -1;
 int ProfileSample::openSampleCount = 0;
 double ProfileSample::rootBegin;
