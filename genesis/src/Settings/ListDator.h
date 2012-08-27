@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseDator.h"
-#include "StringConvert.h"
+#include <algorithm>
+#include "Tools/StringManip.h"
 
 template<class T>
 class ListDator : public BaseDator
@@ -23,7 +24,7 @@ public:
 	bool operator ==(std::string& s)
 	{return (std::find(values.begin(), values.end(), StringConvert<T>::toVal(s)) != values.end());}
 	
-	bool operator !=(std::string& s) {return !(s == (*this));}
+	bool operator !=(std::string& s) {return !((*this) == s);}
 
 	bool hasMultipleValues() {return true;}
 
@@ -33,7 +34,7 @@ public:
 		std::stringstream str;
 		str.unsetf(std::ios::skipws);
 		for (std::list<T>::iterator it = values.begin(); it != values.end(); it++)
-			str << *it;
+			str << *it << ';';
 		std::string res;
 		str >> res;
 		return res;

@@ -2,15 +2,21 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include "constants.h"
-#include "Log.h"
-#include "MMWrapper.h"
-#include "MMPointer.h"
-#include "Utils.h"
+#include "Logging/Log.h"
+#include "Memory/MMWrapper.h"
+#include "Memory/MMPointer.h"
+#include "Utilities/Utils.h"
+#include "Settings/Dator.h"
+#include "Settings/ListDator.h"
+#include "Settings/SettingsManager.h"
+#include <string>
+#include <iostream>
  
 int main(int argc, char **argv)
 {
 	ALLEGRO_DISPLAY* display = 0;
 
+	SettingsManager::getInstance();
 	Log::get().init();
  
 	if(!al_init()) {
@@ -32,6 +38,23 @@ int main(int argc, char **argv)
 		MMPointer<MMWrapper<ALLEGRO_BITMAP>> background = new MMWrapper<ALLEGRO_BITMAP>(al_load_bitmap("assets/images/backgrounds/wallpaper6.jpg"));
 		al_draw_scaled_bitmap(*background, 166, 0, 1333, 1000, 0, 0, RESOLUTION[0], RESOLUTION[1], 0);
 		al_flip_display();
+
+		std::string s;
+		MMPointer<Dator<std::string>> sDat = new Dator<std::string>(s);
+		std::cout << (std::string) *sDat << std::endl;
+		SettingsManager::getInstance()->registerVariable("test_string", sDat);
+
+		std::list<std::string> l;
+		MMPointer<ListDator<std::string>> lDat = new ListDator<std::string>(l);
+		std::cout << (std::string) *lDat << std::endl;
+		SettingsManager::getInstance()->registerVariable("test_list", lDat);
+
+		SettingsManager::getInstance()->parseFile("config.ini");
+
+		std::cout << "------" << std::endl;
+
+		std::cout << (std::string) *sDat << std::endl;
+		std::cout << (std::string) *lDat << std::endl;
 	}
 
 	MMObject::collectGarbage();

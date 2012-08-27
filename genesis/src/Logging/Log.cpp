@@ -1,9 +1,9 @@
 #include "Log.h"
-#include <cstdarg>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
-#include "constants.h"
+#include <cstdarg>
 #include <iostream>
+#include "constants.h"
 
 using namespace std;
 

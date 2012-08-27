@@ -1,5 +1,5 @@
 #include "ProfilerLogHandler.h"
-#include "Log.h"
+#include "Logging/Log.h"
 
 void ProfilerLogHandler::beginOutput()
 {

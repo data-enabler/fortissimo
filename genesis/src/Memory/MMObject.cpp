@@ -1,5 +1,5 @@
 #include "MMObject.h"
-#include "Log.h"
+#include "Logging/Log.h"
 
 using namespace std;
 
