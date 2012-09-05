@@ -20,17 +20,17 @@ int Kernel::execute()
 			ProfileSample ps("Kernel Task Loop");
 
 			// update tasks
-			std::multimap<int, MMPointer<Task>>::reverse_iterator rit;
+			std::multimap<int, std::shared_ptr<Task>>::reverse_iterator rit;
 			for (rit = taskList.rbegin(); rit != taskList.rend();) {
-				Task* t = rit->second;
+				std::shared_ptr<Task> t = rit->second;
 				rit++;
 				if (!t->canKill) t->update();
 			}
 
 			// remove dead tasks
-			std::multimap<int, MMPointer<Task>>::iterator it;
+			std::multimap<int, std::shared_ptr<Task>>::iterator it;
 			for (it = taskList.begin(); it != taskList.end();) {
-				Task* t = it->second;
+				std::shared_ptr<Task> t = it->second;
 				if (t->canKill) {
 					t->stop();
 					taskList.erase(it++);
@@ -48,18 +48,18 @@ int Kernel::execute()
 	return 0;
 }
 
-bool Kernel::addTask(MMPointer<Task>& t)
+bool Kernel::addTask(std::shared_ptr<Task>& t)
 {
 	if (!t->start()) return false;
-	taskList.insert(std::pair<int, MMPointer<Task>>(t->priority, t));
+	taskList.insert(std::pair<int, std::shared_ptr<Task>>(t->priority, t));
 	return true;
 }
 
-void Kernel::suspendTask(MMPointer<Task>& t)
+void Kernel::suspendTask(std::shared_ptr<Task>& t)
 {
-	std::multimap<int, MMPointer<Task>>::iterator it;
-	std::pair<std::multimap<int, MMPointer<Task>>::iterator
-			, std::multimap<int, MMPointer<Task>>::iterator> range;
+	std::multimap<int, std::shared_ptr<Task>>::iterator it;
+	std::pair<std::multimap<int, std::shared_ptr<Task>>::iterator
+			, std::multimap<int, std::shared_ptr<Task>>::iterator> range;
 	range = taskList.equal_range(t->priority);
 
 	for (it = range.first; it != range.second; it++) {
@@ -72,20 +72,20 @@ void Kernel::suspendTask(MMPointer<Task>& t)
 	}
 }
 
-void Kernel::resumeTask(MMPointer<Task>& t)
+void Kernel::resumeTask(std::shared_ptr<Task>& t)
 {
 	if (pausedTaskList.find(t) != pausedTaskList.end()) {
 		t->onResume();
 		pausedTaskList.erase(t);
-		taskList.insert(std::pair<int, MMPointer<Task>>(t->priority, t));
+		taskList.insert(std::pair<int, std::shared_ptr<Task>>(t->priority, t));
 	}
 }
 
-void Kernel::removeTask(MMPointer<Task>& t)
+void Kernel::removeTask(std::shared_ptr<Task>& t)
 {
-	std::multimap<int, MMPointer<Task>>::iterator it;
-	std::pair<std::multimap<int, MMPointer<Task>>::iterator
-			, std::multimap<int, MMPointer<Task>>::iterator> range;
+	std::multimap<int, std::shared_ptr<Task>>::iterator it;
+	std::pair<std::multimap<int, std::shared_ptr<Task>>::iterator
+			, std::multimap<int, std::shared_ptr<Task>>::iterator> range;
 	range = taskList.equal_range(t->priority);
 
 	for (it = range.first; it != range.second; it++) {

@@ -19,12 +19,12 @@ SettingsManager::~SettingsManager()
 
 }
 
-void SettingsManager::registerVariable(std::string& name, BaseDator* var)
+void SettingsManager::registerVariable(std::string& name, std::shared_ptr<BaseDator> var)
 {
 	settingMap[name] = var;
 }
 
-void SettingsManager::registerVariable(char* name, BaseDator* var)
+void SettingsManager::registerVariable(char* name, std::shared_ptr<BaseDator> var)
 {
 	settingMap[std::string(name)] = var;
 }

@@ -1,22 +1,17 @@
-#include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include <iostream>
+#include <memory>
 #include "constants.h"
 #include "Logging/Log.h"
-#include "Memory/MMWrapper.h"
-#include "Memory/MMPointer.h"
 #include "Utilities/Utils.h"
-#include "Settings/Dator.h"
-#include "Settings/ListDator.h"
-#include "Settings/SettingsManager.h"
-#include <string>
-#include <iostream>
+#include "Memory/MemoryTest.h"
+#include "Settings/SettingsTest.h"
  
 int main(int argc, char **argv)
 {
 	ALLEGRO_DISPLAY* display = 0;
 
-	SettingsManager::getInstance();
 	Log::get().init();
  
 	if(!al_init()) {
@@ -35,33 +30,17 @@ int main(int argc, char **argv)
 	//al_clear_to_color(al_map_rgb(0,20,40));
 
 	{
-		MMPointer<MMWrapper<ALLEGRO_BITMAP>> background = new MMWrapper<ALLEGRO_BITMAP>(al_load_bitmap("assets/images/backgrounds/wallpaper6.jpg"));
-		al_draw_scaled_bitmap(*background, 166, 0, 1333, 1000, 0, 0, RESOLUTION[0], RESOLUTION[1], 0);
+		ALLEGRO_BITMAP* background = al_load_bitmap("assets/images/backgrounds/wallpaper6.jpg");
+		al_draw_scaled_bitmap(background, 166, 0, 1333, 1000, 0, 0, RESOLUTION[0], RESOLUTION[1], 0);
 		al_flip_display();
-
-		std::string s;
-		MMPointer<Dator<std::string>> sDat = new Dator<std::string>(s);
-		std::cout << (std::string) *sDat << std::endl;
-		SettingsManager::getInstance()->registerVariable("test_string", sDat);
-
-		std::list<std::string> l;
-		MMPointer<ListDator<std::string>> lDat = new ListDator<std::string>(l);
-		std::cout << (std::string) *lDat << std::endl;
-		SettingsManager::getInstance()->registerVariable("test_list", lDat);
-
-		SettingsManager::getInstance()->parseFile("config.ini");
-
-		std::cout << "------" << std::endl;
-
-		std::cout << (std::string) *sDat << std::endl;
-		std::cout << (std::string) *lDat << std::endl;
+		al_destroy_bitmap(background);
 	}
 
-	MMObject::collectGarbage();
- 
-	MMObject::collectRemainingObjects(true);
- 
-	al_rest(3.0);
+	SettingsTest st; st.run();
+	MemoryTest mt; mt.run();
+
+	//std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+	//al_rest(5.0);
 
 	al_destroy_display(display);
 

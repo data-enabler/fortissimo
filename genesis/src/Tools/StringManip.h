@@ -15,7 +15,7 @@ public:
 		str.unsetf(std::ios::skipws);
 		str << s;
 		T res;
-		str >> res;
+		str >> std::noskipws >> res;
 		return res;
 	}
 
@@ -29,6 +29,7 @@ public:
 		return res;
 	}
 };
+template<> std::string StringConvert<std::string>::toVal(std::string& s) {return s;}
 
 class StringManip
 {

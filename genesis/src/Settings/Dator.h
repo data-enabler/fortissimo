@@ -30,6 +30,9 @@ public:
 template<> BaseDator& Dator<std::string>::operator +=(std::string& s) {target.append(StringConvert<std::string>::toVal(s)); return *this;}
 template<> BaseDator& Dator<std::string>::operator -=(std::string& s) {return *this;}
 
+template<> BaseDator& Dator<bool>::operator +=(std::string& s) {target =  StringConvert<bool>::toVal(s); return *this;}
+template<> BaseDator& Dator<bool>::operator -=(std::string& s) {target = !StringConvert<bool>::toVal(s); return *this;}
+
 // fuck this shit
 //template<class T> 
 //class Dator<std::list<T>>

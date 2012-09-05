@@ -3,14 +3,13 @@
 #include <map>
 #include <set>
 #include "Task.h"
-#include "Memory/MMPointer.h"
 
 class Kernel : public Singleton<Kernel>
 {
 protected:
 	// internally, maps keep their elements ordered from least to greatest, which is convenient
-	std::multimap<int, MMPointer<Task>> taskList;
-	std::set<MMPointer<Task>> pausedTaskList;
+	std::multimap<int, std::shared_ptr<Task>> taskList;
+	std::set<std::shared_ptr<Task>> pausedTaskList;
 
 public:
 	Kernel(void);
@@ -18,10 +17,9 @@ public:
 
 	int execute();
 
-	bool addTask(MMPointer<Task>& t);
-	void suspendTask(MMPointer<Task>& t);
-	void resumeTask(MMPointer<Task>& t);
-	void removeTask(MMPointer<Task>& t);
+	bool addTask(std::shared_ptr<Task>& t);
+	void suspendTask(std::shared_ptr<Task>& t);
+	void resumeTask(std::shared_ptr<Task>& t);
+	void removeTask(std::shared_ptr<Task>& t);
 	void killAllTasks();
 };
-
