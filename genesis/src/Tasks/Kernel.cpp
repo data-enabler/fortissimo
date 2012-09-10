@@ -38,7 +38,7 @@ int Kernel::execute()
 				}
 			}
 
-			MMObject::collectGarbage();
+			MMObject::trim();
 		}
 #ifdef DEBUG
 		ProfileSample::output();
