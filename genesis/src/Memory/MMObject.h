@@ -32,30 +32,19 @@ protected:
 public:
 	virtual ~MMObject(void) {}
 
-	template<class T> static inline std::shared_ptr<T> create()
-	{
-		T* ptr;
-		std::stack<void*>& corpses = deadObjects[typeid(ptr)];
-		if (corpses.empty()) {
-			ptr = new T();
-		} else {
-			ptr = new (corpses.top()) T();
-			corpses.pop();
-		}
-		return std::shared_ptr<T>(ptr, recycler);
-	}
-
 #ifdef _MSC_VER
-#	if _MSC_VER == 1800
+#	if _MSC_VER == 1700
 #		define _MMOBJECT_CREATE(TEMPLATE_LIST, PADDING_LIST, LIST, COMMA, X1, X2, X3, X4) \
 template<class T COMMA LIST(_CLASS_TYPE)> static inline std::shared_ptr<T> create(LIST(_TYPE_REFREF_ARG)) \
 { \
-	T* ptr; \
-	if (deadObjects[typeid(ptr)].empty()) { \
-		ptr = new T(LIST(_FORWARD_ARG)); \
+	std::stack<void*>& corpses = deadObjects[typeid(T*)]; \
+	if (corpses.empty()) { \
+		return std::shared_ptr<T>(new T(LIST(_FORWARD_ARG)), recycler); \
 	} else { \
+		void* space = corpses.top(); \
+		corpses.pop(); \
+		return std::shared_ptr<T>(new (space) T(LIST(_FORWARD_ARG)), recycler); \
 	} \
-	return std::shared_ptr<T>(ptr); \
 }
 _VARIADIC_EXPAND_0X(_MMOBJECT_CREATE, , , , )
 #		undef _MMOBJECT_CREATE
@@ -63,14 +52,26 @@ _VARIADIC_EXPAND_0X(_MMOBJECT_CREATE, , , , )
 #elif __GXX_EXPERIMENTAL_CXX0X__
 template<class T> static inline std::shared_ptr<T> create()
 {
-	std::shared_ptr<MMObject> obj = std::make_shared<T>();
-	return obj;
+	std::stack<void*>& corpses = deadObjects[typeid(T*)];
+	if (corpses.empty()) {
+		return std::shared_ptr<T>(new T(), recycler);
+	} else {
+		void* space = corpses.top();
+		corpses.pop();
+		return std::shared_ptr<T>(new (space) T(), recycler);
+	}
 }
 
 template<class T, class Arg1, class... Args> static inline std::shared_ptr<T> create(Arg1&& arg1, Args&&... args)
 {
-	std::shared_ptr<MMObject> obj = std::make_shared<T>(std::forward<Arg1>(arg1), std::forward<Args>(args)...);
-	return obj;
+	std::stack<void*>& corpses = deadObjects[typeid(T*)];
+	if (corpses.empty()) {
+		return std::shared_ptr<T>(new T(std::forward<Arg1>(arg1), std::forward<Args>(args)...), recycler);
+	} else {
+		void* space = corpses.top();
+		corpses.pop();
+		return std::shared_ptr<T>(new (space) T(std::forward<Arg1>(arg1), std::forward<Args>(args)...), recycler);
+	}
 }
 #endif
 

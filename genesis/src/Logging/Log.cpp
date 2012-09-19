@@ -88,7 +88,7 @@ void Log::write(char* const target, const char* msg, ...)
 		path += target;
 		path += ".log";
 		customLog = new ofstream();
-		(*customLog).open(path);
+		customLog->open(path);
 		runtimeLogs.insert(pair<char*, ofstream*>(target, customLog));
 	}
 

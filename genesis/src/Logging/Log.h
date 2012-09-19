@@ -1,6 +1,6 @@
 #pragma once
 #include <fstream>
-#include <map>
+#include <unordered_map>
 
 #define MAX_LOG_STRINGS 256
 
@@ -13,7 +13,7 @@ protected:
 	std::ofstream clientLog;
 	std::ofstream serverLog;
 
-	std::map<char*, std::ofstream*> runtimeLogs;
+	std::unordered_map<char*, std::ofstream*> runtimeLogs;
 
 	std::string logStrings[MAX_LOG_STRINGS];
 	bool loadStrings();

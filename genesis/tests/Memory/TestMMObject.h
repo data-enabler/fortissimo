@@ -6,7 +6,7 @@ class TestMMObject : public MMObject
 {
 protected:
 	char c;
-	char arr[8192];
+	char arr[1024];
 
 public:
 	TestMMObject() : c('a') {}
