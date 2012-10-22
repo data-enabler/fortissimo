@@ -17,6 +17,4 @@ public:
 	{
 		MemoryTest::numDeleted++;
 	}
-
-	AUTO_SIZE
 };

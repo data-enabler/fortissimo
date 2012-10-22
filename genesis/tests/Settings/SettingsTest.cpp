@@ -4,16 +4,11 @@
 #include <list>
 #include <string>
 #include "Settings/Dator.h"
-#include "Settings/ListDator.h"
 #include "Settings/SettingsManager.h"
 
-SettingsTest::SettingsTest(void)
-{
-}
+SettingsTest::SettingsTest(void) {}
 
-SettingsTest::~SettingsTest(void)
-{
-}
+SettingsTest::~SettingsTest(void) {}
 
 bool SettingsTest::run()
 {

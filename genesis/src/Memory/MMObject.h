@@ -18,7 +18,6 @@ protected:
 			ptr->~T();
 			deadObjects[typeid(ptr)].push(ptr);
 		}
-
 	};
 
 private:
@@ -76,8 +75,17 @@ template<class T, class Arg1, class... Args> static inline std::shared_ptr<T> cr
 #endif
 
 	static void trim() {};
+	
+	static void clear() {
+		for (std::unordered_map<std::type_index, std::stack<void*>>::iterator it = deadObjects.begin();
+																			  it != deadObjects.end(); ++it) {
+			while (!it->second.empty()) {
+				delete it->second.top();
+				it->second.pop();
+			}
+		}
+		deadObjects.clear();
+	}
 
-	virtual unsigned long size()=0;
+	virtual unsigned long size() {return sizeof(*this);}
 };
-
-#define AUTO_SIZE unsigned long size(){return sizeof(*this);}

@@ -1,22 +1,21 @@
 #include "MemoryTest.h"
 #include <cassert>
 #include <iostream>
+#include <memory>
 #include "Timing/ProfileSample.h"
+#include "Timing/ProfilerLogHandler.h"
 #include "TestMMObject.h"
 
 int MemoryTest::numDeleted;
 
-MemoryTest::MemoryTest(void)
-{
-}
+MemoryTest::MemoryTest(void) {}
 
-MemoryTest::~MemoryTest(void)
-{
-}
+MemoryTest::~MemoryTest(void) {}
 
 bool MemoryTest::run()
 {
 	std::cout << "Running Memory Test..." << std::endl;
+	ProfileSample::outputHandler = std::make_shared<ProfilerLogHandler>();
 	numDeleted = 0;
 
 	std::shared_ptr<MMObject> a1 = MMObject::create<TestMMObject>();

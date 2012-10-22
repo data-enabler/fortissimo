@@ -1,6 +1,14 @@
 #pragma once
+#include <limits>
+#include <memory>
 #include <string>
 #include "ProfilerOutputHandler.h"
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif 
 
 class ProfileSample
 {
@@ -33,8 +41,8 @@ protected:
 			isValid = false; // initialise the next time we use this
 			dataCount = 0;
 			averagePercent = 0.0f;
-			minPercent = FLT_MAX;
-			maxPercent = FLT_MIN;
+			minPercent = std::numeric_limits<float>::max();
+			maxPercent = std::numeric_limits<float>::min();
 		}
 	} samples[MAX_PROFILER_SAMPLES];
 
@@ -51,5 +59,5 @@ public:
 	static void resetSample(std::string sampleName);
 	static void resetAll();
 
-	static ProfilerOutputHandler* outputHandler;
+	static std::shared_ptr<ProfilerOutputHandler> outputHandler;
 };

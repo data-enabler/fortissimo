@@ -1,15 +1,20 @@
 #include "ProfileSample.h"
 #include <allegro5/allegro.h>
 #include <cassert>
-#include "float.h"
 #include "ProfilerLogHandler.h"
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif 
 
 int ProfileSample::lastOpenedSample = -1;
 int ProfileSample::openSampleCount = 0;
 double ProfileSample::rootBegin;
 double ProfileSample::rootEnd;
 ProfileSample::PSample ProfileSample::samples[];
-ProfilerOutputHandler* ProfileSample::outputHandler = new ProfilerLogHandler();
+std::shared_ptr<ProfilerOutputHandler> ProfileSample::outputHandler;
 
 ProfileSample::ProfileSample(std::string sampleName)
 {
@@ -79,7 +84,7 @@ ProfileSample::~ProfileSample()
 
 void ProfileSample::output()
 {
-	assert(outputHandler && "Profiler has no output handler set");
+	assert(outputHandler.get() && "Profiler has no output handler set");
 
 	outputHandler->beginOutput();
 
@@ -121,8 +126,8 @@ void ProfileSample::resetSample(std::string sampleName)
 			samples[i].isValid = false;
 			samples[i].dataCount = 0;
 			samples[i].averagePercent = 0.0f;
-			samples[i].minPercent = FLT_MAX;
-			samples[i].maxPercent = FLT_MIN;
+			samples[i].minPercent = std::numeric_limits<float>::max();
+			samples[i].maxPercent = std::numeric_limits<float>::min();
 		}
 	}
 }
@@ -133,7 +138,7 @@ void ProfileSample::resetAll()
 		samples[i].isValid = false;
 		samples[i].dataCount = 0;
 		samples[i].averagePercent = 0.0f;
-		samples[i].minPercent = FLT_MAX;
-		samples[i].maxPercent = FLT_MIN;
+		samples[i].minPercent = std::numeric_limits<float>::max();
+		samples[i].maxPercent = std::numeric_limits<float>::min();
 	}
 }

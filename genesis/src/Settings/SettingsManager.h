@@ -1,8 +1,9 @@
 #pragma once
 #include "Utilities/Singleton.h"
 #include <map>
+#include <memory>
 #include <string>
-#include "BaseDator.h"
+#include "Dator.h"
 
 class SettingsManager : public Singleton<SettingsManager>
 {

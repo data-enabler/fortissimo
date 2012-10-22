@@ -1,6 +1,7 @@
 #pragma once
 #include "Utilities/Singleton.h"
 #include <map>
+#include <memory>
 #include <set>
 #include "Task.h"
 
@@ -8,7 +9,7 @@ class Kernel : public Singleton<Kernel>
 {
 protected:
 	// internally, maps keep their elements ordered from least to greatest, which is convenient
-	std::multimap<int, std::shared_ptr<Task>> taskList;
+	std::multimap<short, std::shared_ptr<Task>> taskList;
 	std::set<std::shared_ptr<Task>> pausedTaskList;
 
 public:
